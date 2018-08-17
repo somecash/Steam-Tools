@@ -1,0 +1,54 @@
+<form action="" method="post">
+<input class="form-control" id="link" name="link" placeholder="https://steamcommunity.com/profiles/76561198840539324" value="<?php if (!empty($_POST['link'])) {echo $_POST['link'];}?>" type="text">
+</br>
+<input type="submit" class="btn btn-default" name="grabjoinlink" value="Grab">
+</form>
+
+<?php
+if(isset($_POST['grabjoinlink'])){
+
+echo '<div class="pre">';
+
+if($_POST['link'] == null)
+{
+    echo 'You must enter a link!';
+} else {
+    
+$url2 = $_POST['link'];
+$content = file_get_contents($url2);
+
+
+//Extracts RAW Data
+$first_step = explode( '<meta property="og:title" content="Steam Community :: ' , $content );
+$second_step = explode('"' , $first_step[1] );
+echo 'Username: <a target="#blank" href="'.$_POST["link"].'">'.$second_step[0].'</a>';
+
+echo '</br>';
+
+$first_step = explode( '<meta property="fb:app_id" content="' , $content );
+$second_step = explode('"' , $first_step[1] );
+echo 'Raw UserID: '.$second_step[0].'';
+
+echo '</br>';
+
+//Extracts RAW Data
+$first_step = explode( '<meta property="og:description" content="' , $content );
+$second_step = explode('"' , $first_step[1] );
+echo 'User Description: '.$second_step[0].'';
+
+echo '<hr>';
+
+$first_step = explode( '<div class="profile_in_game_header">' , $content );
+$second_step = explode('</div>' , $first_step[1] );
+echo 'Account Status: '.$second_step[0].'';
+
+echo '</br>';
+
+$first_step = explode( '<div class="profile_in_game_name">' , $content );
+$second_step = explode('</div>' , $first_step[1] );
+echo 'More Info: '.$second_step[0].'';
+
+}
+echo '</pre>';
+}
+?>
